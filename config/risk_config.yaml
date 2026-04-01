@@ -1,0 +1,69 @@
+# ============================================
+# Risk Configuration — IMMUTABLE DEFAULTS
+# ============================================
+# WARNING: Kill switch and circuit breaker cannot be disabled programmatically.
+
+risk_guard:
+  # Pre-trade limits
+  max_position_size_pct: 20        # Max 20% of portfolio per position
+  max_asset_class_pct: 60          # Max 60% in any single asset class
+  min_cash_reserve_pct: 5          # Always keep at least 5% cash
+  max_correlation: 0.7             # Max correlation with existing positions
+
+  # Daily limits
+  daily_loss_limit_pct: -15        # Halt trading if daily loss exceeds -15%
+  max_trades_per_day: 20           # Prevent overtrading
+  max_new_positions_per_day: 5     # Max new positions in a day
+
+  # Trailing stop
+  trailing_stop_pct: -8            # Trailing stop-loss from peak per position
+  single_position_stop_pct: -15    # Hard stop per single position
+
+kill_switch:
+  # CANNOT BE DISABLED PROGRAMMATICALLY
+  max_drawdown_pct: -40            # Full stop at -40% drawdown from peak
+  lock_file: ".kill_switch_active" # Requires MANUAL deletion to restart
+
+circuit_breaker:
+  consecutive_losses_pause_1h: 3   # 3 consecutive losses → pause 1 hour
+  consecutive_losses_pause_4h: 5   # 5 consecutive losses → pause 4 hours
+  consecutive_losses_pause_24h: 8  # 8 consecutive losses → pause 24 hours + manual review
+  half_size_trades_after_pause: 10 # After pause: half-size for next 10 trades
+  reset_after_consecutive_wins: 5  # Reset loss counter after 5 consecutive wins
+
+position_sizing:
+  method: fractional_kelly
+  kelly_fraction: 0.25             # 1/4 Kelly (conservative)
+  kelly_cap_pct: 20                # Never exceed 20% regardless of Kelly
+  confidence_adjustments:
+    LOW: 0.125                     # 1/8 Kelly
+    MEDIUM: 0.25                   # 1/4 Kelly
+    HIGH: 0.333                    # 1/3 Kelly (never full Kelly)
+
+monitoring:
+  mark_to_market_interval_min: 15  # Mark-to-market every 15 minutes
+  var_check_interval_min: 60       # Portfolio VaR(95%, 1-day) check every hour
+  var_confidence: 0.95
+  var_horizon_days: 1
+
+# Market Posture exposure ceilings
+exposure_ceilings:
+  NEW_ENTRY_ALLOWED:
+    min: 80
+    max: 100
+  SELECTIVE_ENTRY:
+    min: 50
+    max: 79
+    min_score_for_entry: 75
+  REDUCE_ONLY:
+    min: 20
+    max: 49
+  CASH_PRIORITY:
+    min: 0
+    max: 19
+
+# AI Override limits
+ai_override:
+  max_override_points: 20          # Max ±20 points on composite score
+  disable_after_bad_overrides: 5   # Disable for 7 days after 5 bad overrides
+  disable_duration_days: 7

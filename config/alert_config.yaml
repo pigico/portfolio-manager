@@ -1,0 +1,44 @@
+# ============================================
+# Alert Configuration
+# ============================================
+
+telegram:
+  enabled: true
+  # Daily summary times (CET)
+  daily_summary_times:
+    - "08:00"
+    - "18:00"
+
+alerts:
+  # Proactive alerts (sent without user request)
+  buy_signal:
+    enabled: true
+    min_score: 65
+    require_risk_guard_approval: true
+  sell_signal:
+    enabled: true
+    max_score: 30
+  risk_warning:
+    enabled: true
+    # Triggers: circuit breaker, drawdown, VaR breach
+  rebalance_suggestion:
+    enabled: true
+  macro_regime_change:
+    enabled: true
+  ai_override_triggered:
+    enabled: true
+  screener_new_opportunity:
+    enabled: true
+    min_score: 80
+  divergence_alert:
+    enabled: true
+
+  # Confirmation required before paper execution
+  require_confirmation: true
+
+email:
+  enabled: false
+  smtp_server: ""
+  smtp_port: 587
+  sender: ""
+  recipient: ""

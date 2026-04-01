@@ -1,0 +1,85 @@
+# ============================================
+# Portfolio Configuration
+# ============================================
+
+portfolio:
+  initial_capital: 100000  # EUR
+  currency: EUR
+
+  # Default target allocation
+  target_allocation:
+    stocks: 40
+    crypto: 30
+    commodities: 15
+    cash: 15
+
+  # Scoring weights per asset class
+  scoring_weights:
+    stocks:
+      fundamental: 35
+      technical: 30
+      macro: 20
+      sentiment: 15
+    crypto:
+      fundamental: 25
+      technical: 35
+      macro: 20
+      sentiment: 20
+    commodities:
+      fundamental: 25
+      technical: 25
+      macro: 30
+      sentiment: 20
+
+  # Bonuses
+  bonuses:
+    momentum_bonus: 5         # score crescente da 3+ periodi
+    contrarian_bonus: 5       # Extreme Fear + Fundamentals > 60
+    divergence_bonus: 5       # cross-platform divergence confirmed
+
+  # Decision thresholds
+  decision_matrix:
+    strong_buy: 80
+    buy: 65
+    hold: 45
+    reduce: 30
+    # Below 30 = SELL
+
+# Watchlist
+watchlist:
+  stocks:
+    - AAPL
+    - MSFT
+    - GOOGL
+    - AMZN
+    - NVDA
+    - META
+    - TSLA
+    - JPM
+    - V
+    - JNJ
+  crypto:
+    - BTC
+    - ETH
+    - SOL
+    - BNB
+    - XRP
+    - ADA
+    - AVAX
+    - DOT
+    - MATIC
+    - LINK
+  commodities:
+    - GC=F    # Gold
+    - SI=F    # Silver
+    - CL=F    # Crude Oil
+    - NG=F    # Natural Gas
+    - HG=F    # Copper
+
+# Paper trading
+paper_trading:
+  commission_pct: 0.1
+  slippage:
+    stocks: 0.05
+    crypto: 0.10
+    commodities: 0.02

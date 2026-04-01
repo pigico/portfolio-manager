@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  # Main portfolio engine (WebSocket + Scheduler)
+  engine:
+    build: .
+    container_name: portfolio-engine
+    env_file: .env
+    volumes:
+      - ./data:/app/data
+    depends_on:
+      - redis
+    restart: unless-stopped
+    command: python3 scheduler/jobs.py
+
+  # Streamlit Dashboard
+  dashboard:
+    build: .
+    container_name: portfolio-dashboard
+    env_file: .env
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./data:/app/data
+    depends_on:
+      - redis
+    restart: unless-stopped
+    command: streamlit run skills/dashboard/scripts/app.py --server.port=8501 --server.address=0.0.0.0
+
+  # Redis cache
+  redis:
+    image: redis:7-alpine
+    container_name: portfolio-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+
+volumes:
+  redis-data:
