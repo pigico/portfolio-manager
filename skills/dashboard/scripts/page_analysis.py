@@ -15,7 +15,19 @@ from live_data import (
 def render() -> None:
     st.title("Asset Analysis")
 
-    ticker = st.selectbox("Select Asset", ["AAPL", "MSFT", "NVDA", "GOOGL", "TSLA", "AMZN", "META", "JPM"])
+    col_search, col_type = st.columns([3, 1])
+    with col_search:
+        ticker = st.text_input(
+            "Search any ticker (stocks, ETFs, crypto)",
+            value="AAPL",
+            placeholder="e.g. AAPL, MSFT, BTC-USD, ETH-USD, GLD, TSLA...",
+        ).upper().strip()
+    with col_type:
+        asset_type = st.selectbox("Asset Type", ["Stock", "Crypto", "ETF/Commodity"])
+
+    if not ticker:
+        st.info("Enter a ticker above to start analysis.")
+        return
 
     # Fetch live price
     price_data = get_stock_price(ticker)
